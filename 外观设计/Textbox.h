@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include "ButtonBase.h"
+#include "TextboxBase.h"
 #include <easyx.h>
 #include <string>
 #include <algorithm>
@@ -16,8 +15,9 @@
 
 
 
-class Textbox :
-    public ButtonBase
+class Textbox 
+    :public TextboxBase
+   
 {
 private:
 
@@ -37,6 +37,7 @@ private:
     int lastMouseX;          // 上一次鼠标的 x 坐标
     std::wstring text;       // 输入的文字
     std::wstring prompt;     // 提示文字
+    std::wstring input;//要输出的文字
     std::function<void()> callback;
 private:
    
@@ -68,20 +69,26 @@ private:
     }
 
 public:
-    Textbox(int x, int y, int width, int height, int MAXword, const std::wstring& prompt, const std::function<void()>& callback)
-        :ButtonBase(x, y, width, height), MAXword(MAXword), isSelected(false), showCursor(false),
+    Textbox(int x, int y, int width, int height, int MAXword, const std::wstring& prompt)
+        :TextboxBase(x, y, width, height), MAXword(MAXword), isSelected(false), showCursor(false),
         cursorPos(0), Highlight(RGB(0, 87, 255)), selctedtext_color(RGB(199, 147, 246)), text(L""),
         mouseHighlightStart(0), mouseHighlightEnd(0), isMouseDown(false), lastMouseX(0), prompt(prompt)
     {
-        text.reserve(100);
-   
+        text.reserve(20);
+        input.resize(5,1);
+
     }
 
     ~Textbox() {
     }
    
-    const std::wstring& getText() const {
-        return text;
+    
+    virtual std::wstring getinput() {
+        this->input = text;
+        
+        
+        return input;
+
     }
     bool getSelect() const {
         return isSelected;
@@ -203,6 +210,9 @@ public:
             return true;
         }
         else {
+
+            draw();
+            this->input = text;
             isSelected = false;
             cursorPos = static_cast<int>(text.length());
             mouseHighlightStart = 0;

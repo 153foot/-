@@ -1,84 +1,120 @@
 #pragma once
+#include "MediaPlayerBase.h"
+#include "TextboxBase.h"
 #include "PageBase.h"
-#include "TableWidget.h"
+#include "TableWidgetBase.h"
 #include <easyx.h>
-#include <vector>
-
+#include <memory>
+#include <map>
 class Page_and_table : public PageBase {
 private:
-    IMAGE* pageImage;
-    std::vector<std::unique_ptr<ButtonBase>> buttons;
-    std::vector<std::unique_ptr<TableWidgetBase>> tables;
-    int tableIndex;
+    
     int width;
     int height;
+    std::unique_ptr<IMAGE> pageImage;
+    std::unique_ptr<TableWidgetBase> table;
+   
+    std::map<std::string, std::unique_ptr<ButtonBase>> buttons;
+    std::map<std::string, std::shared_ptr<TextboxBase>> texstboxs;
+    std::map<std::string, std::shared_ptr<MediaPlayerBase>> mediaPlayers;
+    
 
 public:
     Page_and_table(int width, int height, const wchar_t* imagePath);
 
 
-       virtual ~Page_and_table();
+    virtual ~Page_and_table();
+ 
 
-    void addButton(std::unique_ptr<ButtonBase> button) {
-        if (buttons.size() == buttons.capacity()) {
-            buttons.reserve(buttons.size() * 2);
-        }
-        buttons.push_back(std::move(button));
+   
+    virtual void addButton(std::string name, std::unique_ptr<ButtonBase> button) {//添加按钮
+
+        buttons.insert(std::pair<const std::string, std::unique_ptr<ButtonBase>>(name, move(button)));
+
     }
 
-    void addTable(std::unique_ptr<TableWidgetBase>& Table) {
-        if (tables.size() == tables.capacity()) {
-            tables.reserve(tables.size() * 2);
-        }
-        tables.push_back(std::move(Table));
+
+    virtual void addtexstbox(std::string name, std::shared_ptr<TextboxBase>  texstbox) {//添加输入框
+
+        texstboxs.insert(std::pair<const std::string, std::shared_ptr<TextboxBase>>(name, texstbox));
+
+    }
+    virtual void addGIF(std::string name, std::shared_ptr<MediaPlayerBase> GIF) {//添加GIF 动图
+
+        mediaPlayers.insert(std::pair<const std::string, std::shared_ptr<MediaPlayerBase>>(name,GIF));
+
     }
 
-    virtual void draw() {
-        if (pageImage != nullptr) {
-            putimage(0, 0, pageImage);
+    virtual void addTable(std::unique_ptr<TableWidgetBase>& Table) {
+     
+        table = std::move(Table);
+    }
+
+    virtual void draw() {//把所有组件添加到一个界面中
+        if (pageImage.get() != nullptr) {
+            putimage(0, 0, pageImage.get());
         }
-        if (!tables.empty()) {
-            for (const auto& table : tables) {
-                if (table) {
-                    table->draw();
-                }
-            }
+       
+
+        if (table) {
+            table->draw();
         }
+            
         if (!buttons.empty()) {
             for (auto& button : buttons) {
-                button->draw();
+                button.second->draw();
             }
         }
+        if (!texstboxs.empty()) {
+            for (auto& texstbox : texstboxs) {
+                texstbox.second->draw();
+            }
+        }
+        if (!mediaPlayers.empty()) {//
+            for (auto& mediaPlayer : mediaPlayers) {
+                mediaPlayer.second->draw();
+            }
+        }
+
     }
 
     virtual void mouseClick(int mouseX, int mouseY) {
+        if (table) {
+            table->handleMouseClick(mouseX, mouseY);
+        }
         for (auto& button : buttons) {
-            if (button->checkClick(mouseX, mouseY)) {
+            if (button.second->checkClick(mouseX, mouseY)) {
                 break;
             }
         }
-        for (const auto& table : tables) {
-            if (table) {
-                table->handleMouseClick(mouseX, mouseY);
+        for (auto& texstbox : texstboxs) {
+            if (texstbox.second->checkClick(mouseX, mouseY)) {
+                break;
             }
         }
+       
+            
+        
     }
 
     virtual void mouseMove(int mouseX, int mouseY) {
         for (auto& button : buttons) {
-            button->checkMouseOver(mouseX, mouseY);
+            button.second->checkMouseOver(mouseX, mouseY);
+        }
+        for (auto& texstbox : texstboxs) {
+            texstbox.second->checkMouseOver(mouseX, mouseY);
         }
     }
 
     virtual void mouseWheel(int mouseX, int mouseY, int wheel) {
-        for (const auto& table : tables) {
+       
             if (table) {
                 table->scroll(mouseX, mouseY, wheel);
             }
-        }
+        
     }
 
-    void maketable(std::unique_ptr<TableWidgetBase> tablePtr) {
+    void maketable(std::unique_ptr<TableWidgetBase> tablePtr) {//要改
         tablePtr->setData({
             {L"活动ID", L"活动名称", L"开始时间", L"结束时间", L"活动内容", L"活动规则", L"参与条件", L"活动状态"},
             {L"1", L"夏日清凉特惠", L"2025-07-01 00:00:00", L"2025-07-31 23:59:59", L"全店商品 8 折优惠", L"直接在结算时享受折扣", L"无", L"未开始"},
@@ -93,6 +129,6 @@ public:
             {L"10", L"圣诞节惊喜活动", L"2025-12-25 00:00:00", L"2025-12-26 23:59:59", L"消费满 100 可参与抽奖", L"根据抽奖结果获得相应奖品", L"消费满 100 元", L"未开始"}
             });
         addTable(tablePtr);
-        tableIndex = 0;
+       
     }
 };

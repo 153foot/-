@@ -15,6 +15,7 @@ public:
 	ButtonBase(int x, int y, int width, int height);
 	
 	virtual ~ButtonBase();
+	virtual const std::wstring getinput();
 	virtual void draw() = 0; // 纯虚函数，子类必须实现
 	virtual void draw(const std::wstring& basePath, int index);
 	virtual bool handleMouseUp();

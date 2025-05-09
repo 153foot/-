@@ -1,7 +1,6 @@
 #pragma once
 #include "ButtonBase.h"
-#include <vector>
-#include <memory>
+
 #include "PageBase.h"
 #include "Page.h"
 #include"Page_and_table.h"
@@ -11,13 +10,20 @@
 #include "Textbox.h"
 #include "TableWidget.h"
 #include "AnimatedGifPlayer.h"
+#include <vector>
+#include <memory>
+#include <map>
 class Widget {
 private:
     int width;
     int height;
     int currentIndex;
-    std::vector<std::unique_ptr<PageBase>> pages;
+    std::vector<std::shared_ptr<PageBase>> pages;
     void setCurrentIndex(int index);
+    std::map<std::wstring, std::wstring> userDatabase; // 存储用户名和密码
+    std::map<std::wstring, std::wstring> adminDatabase; // 存储管理员用户名和密码
+    std::wstring pas;
+    std::wstring name;
    
  // 定义按钮 ID 枚举
     enum class ButtonID {
@@ -93,7 +99,25 @@ public:
     
     
     }
+    // 登录验证
+    bool login(const std::wstring& username, const std::wstring& password, bool isAdmin) {
+        auto& database = isAdmin ? adminDatabase : userDatabase;
+        auto it = database.find(username);
+        if (it != database.end() && it->second == password) {
+            return true;
+        }
+        return false;
+    }
 
+    // 注册
+    bool registerUser(const std::wstring& username, const std::wstring& password, bool isAdmin) {
+        auto& database = isAdmin ? adminDatabase : userDatabase;
+        if (database.find(username) == database.end()) {
+            database[username] = password;
+            return true;
+        }
+        return false;
+    }
    
     void init();
     void run();
@@ -400,7 +424,12 @@ public:
 	
     }   
 
-
-
-	
+    void init_page0(int width, int height);
+    void init_page1(int width, int height);
+    void init_page2(int width, int height);
+    void init_page3(int width, int height);
+    void init_page4(int width, int height);
+    void init_page5(int width, int height);
+    void init_page6(int width, int height);
+   
 };

@@ -7,6 +7,12 @@
   ButtonBase::~ButtonBase() {
 }
 
+  const std::wstring ButtonBase::getinput()
+  {
+	  return L" ";
+	  // TODO: 在此处插入 return 语句
+  }
+
   void ButtonBase::draw(const std::wstring& basePath, int index)
   {
   }

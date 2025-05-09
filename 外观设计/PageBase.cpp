@@ -4,9 +4,22 @@ PageBase::~PageBase()
 {
 }
 
-void PageBase::addButton(std::unique_ptr<ButtonBase> button)
+void PageBase::addButton(std::string name, std::unique_ptr<ButtonBase> button)
 {
 }
+
+void PageBase::addtexstbox(std::string name, std::shared_ptr<TextboxBase> texstbox)
+{
+}
+
+void PageBase::addGIF(std::string name, std::shared_ptr<MediaPlayerBase> GIF)
+{
+}
+
+void PageBase::addTable(std::unique_ptr<TableWidgetBase>& Table)
+{
+}
+
 
 void PageBase::addaline()
 {
@@ -20,9 +33,7 @@ void PageBase::draw()
 {
 }
 
-void PageBase::draw(const std::wstring& basePath, int index)
-{
-}
+
 
 void PageBase::mouseClick(int mouseX, int mouseY)
 {
@@ -47,3 +58,11 @@ void PageBase::KeyInput(wchar_t ch)
 void PageBase::Hotkeydown(BYTE as)
 {
 }
+
+ std::wstring PageBase::get_texstbox_message(std::string index)
+{
+	return std::wstring();
+}
+
+
+

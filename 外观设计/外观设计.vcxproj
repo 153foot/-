@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="AnimatedGifPlayer.h" />
     <ClInclude Include="ButtonBase.h" />
+    <ClInclude Include="MediaPlayerBase.h" />
     <ClInclude Include="PageBase.h" />
     <ClInclude Include="Page_and_table.h" />
     <ClInclude Include="resource.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="TableWidget.h" />
     <ClInclude Include="TableWidgetBase.h" />
     <ClInclude Include="Textbox.h" />
+    <ClInclude Include="TextboxBase.h" />
     <ClInclude Include="TextButton.h" />
     <ClInclude Include="Ordinary_button.h" />
     <ClInclude Include="Page.h" />
@@ -41,11 +43,13 @@
     <ClCompile Include="aaaaaa.cpp" />
     <ClCompile Include="AnimatedGifPlayer.cpp" />
     <ClCompile Include="ButtonBase.cpp" />
+    <ClCompile Include="MediaPlayerBase.cpp" />
     <ClCompile Include="PageBase.cpp" />
     <ClCompile Include="Page_and_table.cpp" />
     <ClCompile Include="TableWidget.cpp" />
     <ClCompile Include="TableWidgetBase.cpp" />
     <ClCompile Include="Textbox.cpp" />
+    <ClCompile Include="TextboxBase.cpp" />
     <ClCompile Include="TextButton.cpp" />
     <ClCompile Include="Ordinary_button.cpp" />
     <ClCompile Include="Page.cpp" />

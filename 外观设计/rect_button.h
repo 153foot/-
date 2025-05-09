@@ -48,7 +48,7 @@ public:
   //      mciSendStringW(L"open .\\soundeffects\\hover.mp3 alias audio", NULL, 0, NULL);
   //      mciSendStringW(L"open .\\soundeffects\\select.mp3 alias audio1", NULL, 0, NULL);
   //  }
-    rect_button(int x, int y, int width, int height, const wchar_t* text, const std::function<void()> &callback ,COLORREF mbuttonColor= RGB(255, 189, 225), 
+    rect_button(int x, int y, int width, int height, const wchar_t* text, const std::function<void()> callback ,COLORREF mbuttonColor= RGB(255, 189, 225), 
         COLORREF mtextColor= RGB(255, 255, 255), COLORREF mborderColor= RGB(255, 189, 225),LPCTSTR mfontName= _T("ËÎÌו"), COLORREF mbuttonColor1= RGB(173, 173, 173), COLORREF mbuttonColor2= RGB(245, 204, 132), COLORREF mtextColor1= RGB(0, 0, 0))
         :ButtonBase(x, y, width, height), text(text), callback(callback),scale(1.0f), isMouseOver(false),
         scaledWidth(0), scaledHeight(0), scaledX(0), scaledY(0), buttonColor(mbuttonColor), textColor(mtextColor), 
