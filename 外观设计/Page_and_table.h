@@ -6,13 +6,14 @@
 #include <easyx.h>
 #include <memory>
 #include <map>
+#include "string.h"
 class Page_and_table : public PageBase {
 private:
     
     int width;
     int height;
     std::unique_ptr<IMAGE> pageImage;
-    std::unique_ptr<TableWidgetBase> table;
+    std::shared_ptr<TableWidgetBase> table;
    
     std::map<std::string, std::unique_ptr<ButtonBase>> buttons;
     std::map<std::string, std::shared_ptr<TextboxBase>> texstboxs;
@@ -45,11 +46,11 @@ public:
 
     }
 
-    virtual void addTable(std::unique_ptr<TableWidgetBase>& Table) {
+    virtual void addTable(std::shared_ptr<TableWidgetBase> Table) {
      
-        table = std::move(Table);
+        table = Table;
     }
-
+   
     virtual void draw() {//把所有组件添加到一个界面中
         if (pageImage.get() != nullptr) {
             putimage(0, 0, pageImage.get());
@@ -114,7 +115,7 @@ public:
         
     }
 
-    void maketable(std::unique_ptr<TableWidgetBase> tablePtr) {//要改
+    void maketable(std::shared_ptr<TableWidgetBase> tablePtr) {//要改
         tablePtr->setData({
             {L"活动ID", L"活动名称", L"开始时间", L"结束时间", L"活动内容", L"活动规则", L"参与条件", L"活动状态"},
             {L"1", L"夏日清凉特惠", L"2025-07-01 00:00:00", L"2025-07-31 23:59:59", L"全店商品 8 折优惠", L"直接在结算时享受折扣", L"无", L"未开始"},
@@ -131,4 +132,24 @@ public:
         addTable(tablePtr);
        
     }
+     size_t Cell_num() {
+
+        return table->Cell_num();
+    }
+    // 删除选中行
+     void deleteSelectedRow(int num) {
+        
+         table->deleteSelectedRow(num);
+    }
+
+    // 修改选中行
+     void updateSelectedRow(const std::vector<std::wstring>& newRow) {
+        // table->updateSelectedRow(,);
+    }
+
+    // 添加新行
+       void addRow(const std::vector<std::wstring>& newRow) {
+        
+    }
+
 };

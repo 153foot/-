@@ -182,7 +182,7 @@ inline void Widget::init_page1(int width, int height) { // 创建登录界面1
     //    
     //}));//
     // 添加文本框并保存实例
-    page1->addtexstbox("输入密码", std::make_unique<Textbox>(300, 210, 200, 30, 10, L"eeeee"));//
+    page1->addtexstbox("输入密码", std::make_unique<Textbox>(300, 210, 200, 30, 10, L"eeeee",false));//
 
 
 
@@ -373,7 +373,7 @@ inline void Widget::init_page5(int width, int height)
 inline void Widget::init_page6(int width, int height)
 {//测试！！！！！！！！！！222！！！￥￥￥￥￥￥￥￥￥
     auto page6 = std::make_shared<Page_and_table>(width, height, L".//Image//3.jpg");
-    page6->maketable(std::make_unique<TableWidget>(120, 120, 800, 300, 4, 5));
+    page6->maketable(std::make_shared<TableWidget>(120, 120, 800, 300, 4, 5));
 
     page6->addButton("1",std::make_unique<rect_button>(920, 0, 100, 20, L"返回！", [=]() {//
         setCurrentIndex(0);//测试用
@@ -406,6 +406,26 @@ inline void Widget::init_page6(int width, int height)
 
     }));
     page6->addButton("5", std::make_unique<rect_button>(820, 478, 90, 20, L"删除活动", [=]() {//
+        // 定义字符串缓冲区，并接收用户输入
+        wchar_t s[10];
+        if (InputBox(s, 10, L"请输入要删除的行号从1开始", NULL, NULL, NULL, 0, false)) {
+
+            // 将用户输入转换为数字
+            int r = _wtoi(s);
+            if (r > 0 && r < page6->Cell_num()) {
+                page6->deleteSelectedRow(r);
+
+            }
+            else {
+
+                MessageBoxW(NULL, _T("输入ID号错误"), _T("警告"), MB_OK | MB_ICONWARNING);
+            }
+        
+        
+        }
+      
+       
+           
 
     }));
 

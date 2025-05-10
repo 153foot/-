@@ -1,20 +1,17 @@
-#pragma once
 #include "TableWidgetBase.h"
-#include <easyx.h>
-#include <string>
 #include <vector>
-#include <functional>
-using namespace std;
-
-// 表格类
-class TableWidget
+#include <string>
+#include "functional"
+#include <algorithm>
+#include <easyx.h>
+class TableWidget 
     : public TableWidgetBase {
 private:
     int visibleRowCount; // 最多可见行数
-    int rowHeight;       // 行的高度
+    int rowHeight;       // 行
     int scrollOffset;    // 垂直滚动偏移
-    vector<vector<wstring>> data;
-    vector<int> columnWidths; // 列的宽度
+    std::vector<std::vector<std::wstring>> data;
+    std::vector<int> columnWidths; // 列的宽度
     int selectedRow;          // 被选中的行
     int scrollbarWidth;       // 垂直滚动条的宽度
     int handleHeight;         // 垂直滚动条滑块的高度
@@ -54,14 +51,15 @@ public:
 
     virtual ~TableWidget() {}
 
-    int getSelectedRow() const { return selectedRow; }
+    virtual int getSelectedRow(int a)  { return this-> selectedRow=a; }
 
-    wstring getSelectedInfo(int col) const { return data[selectedRow][col]; }
+    std::wstring getSelectedInfo(int col) const { return data[selectedRow][col]; }
 
-    virtual void setData(const vector<vector<wstring>>& newData) {
+    // 设置表格数据
+    virtual void setData(const std::vector<std::vector<std::wstring>>& newData) {
         data.clear();
         for (size_t i = 0; i < newData.size(); ++i) {
-            vector<wstring> row;
+            std::vector<std::wstring> row;
             for (size_t j = 0; j < newData[i].size(); ++j) {
                 row.push_back(newData[i][j]);
             }
@@ -96,12 +94,14 @@ public:
             it = (float)it / sumWidth * (width - scrollbarWidth); // 减去垂直滚动条宽度
     }
 
+    // 向上滚动
     void scrollUp() {
         if (scrollOffset > 0) {
             scrollOffset = max(0, scrollOffset - scrollStep);
         }
     }
 
+    // 向下滚动
     void scrollDown() {
         int totalHeight = data.size() * rowHeight;
         int maxScrollOffset = max(0, totalHeight - height + rowHeight);
@@ -110,7 +110,12 @@ public:
             scrollOffset = min(maxScrollOffset, scrollOffset + scrollStep);
         }
     }
+    virtual size_t Cell_num() {
 
+       return data.size();
+    }
+
+    // 处理鼠标滚动
     virtual void scroll(int mouseX, int mouseY, int wheel) {
         if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
             if (wheel > 0) {
@@ -122,10 +127,12 @@ public:
         }
     }
 
+    // 处理鼠标点击
     virtual void handleMouseClick(int mouseX, int mouseY) {
+        int clickedRow = (mouseY - y + scrollOffset) / rowHeight;
         if (mouseX >= x && mouseX <= x + width - scrollbarWidth && mouseY >= y && mouseY <= y + height) {
             callback();
-            int clickedRow = (mouseY - y + scrollOffset) / rowHeight;
+         
 
             if (clickedRow >= 0 && clickedRow < static_cast<int>(data.size())) {
                 selectedRow = clickedRow;
@@ -135,10 +142,12 @@ public:
             }
         }
         else {
+           
             selectedRow = -1;
         }
     }
 
+    // 绘制表格
     virtual void draw() {
         // 绘制表格区域
         setlinestyle(PS_SOLID, 2);
@@ -234,6 +243,44 @@ public:
         solidrectangle(handleX, y + handleY, handleX + handleWidth, y + handleY + handleHeight);
     }
 
-    
+    // 删除行
+   virtual void deleteSelectedRow(int a) {
+        if (a >0) {
+            data.erase(data.begin() + a);
+
+          
+            sortByID();
+            calculateColumnWidths();
+            draw();
+            selectedRow = -1;
+        }
+    }
+
+    // 修改选中行
+   virtual void updateSelectedRow(std::vector < std::wstring > & newRow) {
+        if (selectedRow != -1) {
+            data[selectedRow] = newRow;
+            sortByID();
+            calculateColumnWidths();
+        }
+    }
+
+    // 添加新行
+   virtual   void addRow( std::vector<std::wstring>& newRow) {
+        data.push_back(newRow);
+        sortByID();
+        calculateColumnWidths();
+    }
+
+    // 按ID排序（假设第一列是ID列）
+    void sortByID() {
+        // 重新编号：从1开始递增
+        for (int i = 1; i < data.size(); ++i) {
+            if (data[i].size() > 0) { // 确保行至少有一个元素
+                data[i][0] = std::to_wstring(i); // 更新ID列
+            }
+        }
+    }
+
   
 };

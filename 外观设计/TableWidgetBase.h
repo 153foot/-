@@ -4,12 +4,12 @@
 #include<string>
 class TableWidgetBase
 {
-	protected:
+protected:
 	int x;
 	int y;
 	int width;
 	int height;
-	
+
 
 public:
 	TableWidgetBase(int x, int y, int width, int height);
@@ -23,8 +23,26 @@ public:
 	virtual void doublecheckClick(int mouseX, int mouseY);//双击
 	virtual void scroll(int mouseX, int mouseY, int wheel);
 	virtual void handleMouseClick(int mouseX, int mouseY);
-	virtual void setData(const std:: vector<std::vector<std::wstring>>& newData);
+	virtual void setData(const std::vector<std::vector<std::wstring>>& newData);
+	virtual int getSelectedRow() {
+		return -1;
+	}
+	virtual size_t Cell_num() {
+		return 0;
+		
+	}
+	// 删除选中行
+	virtual void deleteSelectedRow(int a) {
 
+	}
+	// 修改选中行
+	virtual void updateSelectedRow( std::vector<std::wstring>& newRow) {
+
+	}
+	// 添加新行
+	virtual   void addRow( std::vector<std::wstring>& newRow) {
+
+	}
 	
 };
 

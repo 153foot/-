@@ -1,4 +1,5 @@
 #pragma once
+#include "Textbox.h"
 #include"PageBase.h"
 #include "MediaPlayerBase.h"
 #include "TextboxBase.h"
@@ -21,7 +22,7 @@ private:
     std::map<std::string, std::unique_ptr<ButtonBase>> buttons;
     std::map<std::string, std::shared_ptr<TextboxBase>> texstboxs;
     std::map<std::string, std::shared_ptr<MediaPlayerBase>> mediaPlayers;
-
+    TextboxBase* currentSelectedTextBox = nullptr;
 public:
 	
     Page(int width, int height, const wchar_t* imagePath);
@@ -59,5 +60,5 @@ public:
     virtual void HandleMouseUp();
     virtual void KeyInput(wchar_t ch);
     virtual void Hotkeydown(BYTE as);
-    
+    void onMouseClick(int mouseX, int mouseY);
 };

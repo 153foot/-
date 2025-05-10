@@ -27,7 +27,7 @@ public:
         mciSendStringW(L"open .\\soundeffects\\select.mp3 alias audio1", NULL, 0, NULL);
     }
 
-    TextButton(int x, int y, const wchar_t* text, const std::function<void()> callback,
+    TextButton(int x, int y, const wchar_t* text, const std::function<void()>& callback,
         COLORREF mtextColor = RGB(255, 255, 255), COLORREF mtextColor1 = RGB(0, 0, 0),
         LPCTSTR mfontName = _T("ËÎÌו"))
         : ButtonBase(x, y, 0, 0), text(text), callback(callback), scale(1.0f), isMouseOver(false),

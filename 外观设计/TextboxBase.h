@@ -37,5 +37,8 @@ public:
 	virtual  void checkMouseOver(int mouseX, int mouseY) {
 	
 	}
+	virtual  void deselect() {
+		
+	}
 };
 
