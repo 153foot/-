@@ -3,7 +3,7 @@
 #include"PageBase.h"
 #include "MediaPlayerBase.h"
 #include "TextboxBase.h"
-
+#include "MessageDialogBase.h"
 
 #include <easyx.h>
 #include <memory>
@@ -16,9 +16,9 @@ class Page//只能添加按钮的
 private:
     int width;
     int height;
-    std::unique_ptr<IMAGE> pageImage;
+    std::unique_ptr<MessageDialogBase> MessageDialo;
   
-
+    std::unique_ptr<IMAGE> pageImage;
     std::map<std::string, std::unique_ptr<ButtonBase>> buttons;
     std::map<std::string, std::shared_ptr<TextboxBase>> texstboxs;
     std::map<std::string, std::shared_ptr<MediaPlayerBase>> mediaPlayers;
@@ -44,6 +44,13 @@ public:
         mediaPlayers.insert(std::pair<const std::string, std::shared_ptr<MediaPlayerBase>>(name, GIF));
 
     }
+	virtual void addMessageDialog(std::unique_ptr<MessageDialogBase> messageDialog) {//添加消息对话框
+		MessageDialo = std::move(messageDialog);
+	}
+    virtual void setMessageDialog(std::wstring message) {//添加消息对话框
+        MessageDialo->setMessage(message);
+    }
+
     virtual std::wstring  get_texstbox_message(std::string index) {
         
            
@@ -61,4 +68,12 @@ public:
     virtual void KeyInput(wchar_t ch);
     virtual void Hotkeydown(BYTE as);
     void onMouseClick(int mouseX, int mouseY);
+	/*void showMessageDialog() {
+		if (MessageDialo) {
+			MessageDialo->draw();
+
+            Sleep(2000);
+		}
+	}*/
+
 };

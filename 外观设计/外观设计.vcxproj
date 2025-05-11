@@ -22,6 +22,8 @@
     <ClInclude Include="AnimatedGifPlayer.h" />
     <ClInclude Include="ButtonBase.h" />
     <ClInclude Include="MediaPlayerBase.h" />
+    <ClInclude Include="MessageDialog.h" />
+    <ClInclude Include="MessageDialogBase.h" />
     <ClInclude Include="PageBase.h" />
     <ClInclude Include="Page_and_table.h" />
     <ClInclude Include="resource.h" />
@@ -44,6 +46,8 @@
     <ClCompile Include="AnimatedGifPlayer.cpp" />
     <ClCompile Include="ButtonBase.cpp" />
     <ClCompile Include="MediaPlayerBase.cpp" />
+    <ClCompile Include="MessageDialog.cpp" />
+    <ClCompile Include="MessageDialogBase.cpp" />
     <ClCompile Include="PageBase.cpp" />
     <ClCompile Include="Page_and_table.cpp" />
     <ClCompile Include="TableWidget.cpp" />

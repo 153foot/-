@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <iostream>
 
-
+HHOOK Widget::g_hHook=NULL;
 Widget::Widget(int width, int height) : width(width), height(height), currentIndex(0) {
 
     //pages.reserve(100);
@@ -184,14 +184,17 @@ inline void Widget::init_page1(int width, int height) { // 创建登录界面1
     // 添加文本框并保存实例
     page1->addtexstbox("输入密码", std::make_unique<Textbox>(300, 210, 200, 30, 10, L"eeeee",false));//
 
-
-
+   
+    page1->addMessageDialog(std::make_unique<MessageDialog>(510, 160, 150, 80, L"消息弹出框"));
 
     page1->addButton("进入", std::make_unique<rect_button>(300, 500, 400, 30, L"进入", [=]() {//9
         pas = page1->get_texstbox_message("输入密码");
+        name = L"khcisjcioaxaocjsjcjojoicjvjosjvos";
+     
+        page1->setMessageDialog(name);
         
-        MessageBoxW(NULL, pas.c_str(), _T("消息框标题"), MB_OK | MB_ICONINFORMATION);
-
+       // MessageBoxW(NULL, pas.c_str(), _T("消息框标题"), MB_OK | MB_ICONINFORMATION);
+       
     }));
 
 
@@ -417,7 +420,7 @@ inline void Widget::init_page6(int width, int height)
 
             }
             else {
-
+               
                 MessageBoxW(NULL, _T("输入ID号错误"), _T("警告"), MB_OK | MB_ICONWARNING);
             }
         

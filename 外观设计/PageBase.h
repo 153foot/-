@@ -1,10 +1,11 @@
 #pragma once
-#include <memory>
+#include "MessageDialogBase.h"
 #include "MediaPlayerBase.h"
 #include "TextboxBase.h"
 #include "ButtonBase.h"
 
 #include "TableWidgetBase.h"
+#include <memory>
 
 class PageBase
 {
@@ -27,6 +28,6 @@ public:
 	virtual void KeyInput(wchar_t ch);
 	virtual void Hotkeydown(BYTE as);
 	virtual std::wstring get_texstbox_message(std::string index);
-
+	virtual void addMessageDialog(std::unique_ptr<MessageDialogBase> messageDialog);//添加消息对话框
 };
 

@@ -266,8 +266,8 @@ public:
     }
 
     // Ìí¼ÓÐÂÐÐ
-   virtual   void addRow( std::vector<std::wstring>& newRow) {
-        data.push_back(newRow);
+   virtual   void addRow( std::wstring& newRow) {
+        
         sortByID();
         calculateColumnWidths();
     }

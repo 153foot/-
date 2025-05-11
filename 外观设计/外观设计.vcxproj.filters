@@ -72,6 +72,12 @@
     <ClInclude Include="MediaPlayerBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MessageDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDialogBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aaaaaa.cpp">
@@ -117,6 +123,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MediaPlayerBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageDialogBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

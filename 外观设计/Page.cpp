@@ -1,7 +1,7 @@
 #include "page.h"
 
 Page::Page(int width, int height, const wchar_t* imagePath)
-    : width(width), height(height), pageImage(new IMAGE(width, height)){
+    : width(width), height(height), pageImage(new IMAGE(width, height)), MessageDialo(nullptr){
     
     loadimage(pageImage.get(), imagePath, width, height);
 	//putimage(0, 0, pageImage);
@@ -42,7 +42,9 @@ void Page::draw() {
         }
     }
 
-
+	if (MessageDialo) {
+        MessageDialo->draw();
+	}
 
 }
 
@@ -53,21 +55,6 @@ void Page::mouseClick(int mouseX, int mouseY) {
         }
     }
     onMouseClick( mouseX,  mouseY);
-    //Textbox* newSelectedTextBox = nullptr;
-
-    //// 1. 遍历所有文本框，找到被点击的文本框
-    //for (auto& texstbox : texstboxs) {
-    //    if (texstbox.second->checkClick(mouseX, mouseY)) {
-    //        break;
-    //    }
-    //}
-    //// 2. 取消旧文本框的选中（如果存在且不是当前点击的文本框）
-    //if (currentSelectedTextBox && currentSelectedTextBox != newSelectedTextBox) {
-    //    currentSelectedTextBox->deselect(); // 调用取消选中方法
-    //}
-
-    //// 3. 更新当前选中状态（newSelectedTextBox 可能为 nullptr，即点击空白区域）
-    //currentSelectedTextBox = newSelectedTextBox;
   
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "ButtonBase.h"
-
+#include <shlobj.h>
 #include "PageBase.h"
 #include "Page.h"
 #include"Page_and_table.h"
@@ -10,11 +10,14 @@
 #include "Textbox.h"
 #include "TableWidget.h"
 #include "AnimatedGifPlayer.h"
+#include "MessageDialog.h"
 #include <vector>
 #include <memory>
 #include <map>
 class Widget {
 private:
+    // 全局钩子句柄
+    static  HHOOK g_hHook;
     int width;
     int height;
     int currentIndex;
@@ -99,6 +102,42 @@ public:
     
     
     }
+  
+
+    // 键盘钩子处理函数
+    static  LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+        if (nCode == HC_ACTION && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
+            KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+
+            // 检查Ctrl+C和Ctrl+V
+            bool ctrlPressed = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
+            if (ctrlPressed) {
+                switch (kb->vkCode) {
+                case 'C':
+                    std::cout << "Ctrl+C 组合键被按下" << std::endl;
+                    return 1; // 拦截按键
+                case 'V':
+                    std::cout << "Ctrl+V 组合键被按下" << std::endl;
+                    return 1; // 拦截按键
+                }
+            }
+
+            // 检查Shift+左键和Shift+右键
+            bool shiftPressed = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+            if (shiftPressed) {
+                switch (kb->vkCode) {
+                case VK_LEFT:
+                    std::cout << "Shift+左键 组合键被按下" << std::endl;
+                    return 1; // 拦截按键
+                case VK_RIGHT:
+                    std::cout << "Shift+右键 组合键被按下" << std::endl;
+                    return 1; // 拦截按键
+                }
+            }
+        }
+        return CallNextHookEx(g_hHook, nCode, wParam, lParam);
+    }
+
     // 登录验证
     bool login(const std::wstring& username, const std::wstring& password, bool isAdmin) {
         auto& database = isAdmin ? adminDatabase : userDatabase;

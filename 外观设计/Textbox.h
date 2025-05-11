@@ -10,7 +10,8 @@
 #include <cwctype>
 #include <functional>
 
-class Textbox : public TextboxBase
+class Textbox 
+    : public TextboxBase
 {
 private:
     bool isDisplay_content;     // 是否显示文本内容，true显示文本，false显示掩码
@@ -249,15 +250,24 @@ public:
     }
 
     virtual void hotkeydown(BYTE as) {
-        if (as == VK_DELETE) {
-            deleteHighlightedText();
-        }
+      
 
         bool shiftPressed = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
         bool ctrlPressed = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
 
         if (isSelected) {
             switch (as) {
+            case VK_DELETE: {
+                if (as == VK_DELETE) {
+                    deleteHighlightedText();
+                }
+            
+            
+            }
+
+
+
+                  break;
             case VK_LEFT:
                 if (shiftPressed) {
                     if (cursorPos > 0) {

@@ -64,5 +64,9 @@ void PageBase::Hotkeydown(BYTE as)
 	return std::wstring();
 }
 
+ void PageBase::addMessageDialog(std::unique_ptr<MessageDialogBase> messageDialog)
+ {
+ }
+
 
 
