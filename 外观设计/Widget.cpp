@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <iostream>
 
-HHOOK Widget::g_hHook=NULL;
+
 Widget::Widget(int width, int height) : width(width), height(height), currentIndex(0) {
 
     //pages.reserve(100);
@@ -191,7 +191,7 @@ inline void Widget::init_page1(int width, int height) { // 创建登录界面1
         pas = page1->get_texstbox_message("输入密码");
         name = L"khcisjcioaxaocjsjcjojoicjvjosjvos";
      
-        page1->setMessageDialog(name);
+        page1->setMessageDialog(pas);
         
        // MessageBoxW(NULL, pas.c_str(), _T("消息框标题"), MB_OK | MB_ICONINFORMATION);
        
@@ -376,10 +376,21 @@ inline void Widget::init_page5(int width, int height)
 inline void Widget::init_page6(int width, int height)
 {//测试！！！！！！！！！！222！！！￥￥￥￥￥￥￥￥￥
     auto page6 = std::make_shared<Page_and_table>(width, height, L".//Image//3.jpg");
-    page6->maketable(std::make_shared<TableWidget>(120, 120, 800, 300, 4, 5));
+    // 转换 UTF-8 路径为宽字符路径
+   // 或者直接定义为常量
+     std::vector<std::wstring> ADMIN_HEADERS = {
+       L"管理员ID", L"管理员用户名", L"管理员密码", L"管理员姓名",
+       L"联系方式", L"权限等级", L"权限列表", L"入职日期",
+       L"最后登录时间"
+    };
+    page6->maketable(std::make_shared<TableWidget>(100, 120, 920, 300, 8, 5), "管理员.csv",L'\t', ADMIN_HEADERS);
 
     page6->addButton("1",std::make_unique<rect_button>(920, 0, 100, 20, L"返回！", [=]() {//
         setCurrentIndex(0);//测试用
+
+    }));
+    page6->addButton("1111", std::make_unique<rect_button>(920, 30, 100, 20, L"提交！", [=]() {//
+        page6->updata("评论表.csv");
 
     }));
     //page6->addButton(std:: make_unique<rect_button>(0, 100, 90, 20, L"确认下单", [=]() {//

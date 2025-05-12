@@ -23,10 +23,8 @@ public:
 	virtual void doublecheckClick(int mouseX, int mouseY);//Ë«»÷
 	virtual void scroll(int mouseX, int mouseY, int wheel);
 	virtual void handleMouseClick(int mouseX, int mouseY);
-	virtual void setData(const std::vector<std::vector<std::wstring>>& newData);
-	virtual int getSelectedRow() {
-		return -1;
-	}
+	virtual void setData(const std::vector<std::vector<std::wstring>> newData);
+	virtual  std::vector<std::vector<std::wstring>>& getData() = 0;
 	virtual size_t Cell_num() {
 		return 0;
 		

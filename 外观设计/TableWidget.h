@@ -51,12 +51,12 @@ public:
 
     virtual ~TableWidget() {}
 
-    virtual int getSelectedRow(int a)  { return this-> selectedRow=a; }
+    virtual  std::vector<std::vector<std::wstring>>& getData()  { return this->data; }
 
     std::wstring getSelectedInfo(int col) const { return data[selectedRow][col]; }
 
     // 设置表格数据
-    virtual void setData(const std::vector<std::vector<std::wstring>>& newData) {
+    virtual void setData(const std::vector<std::vector<std::wstring>> newData) {
         data.clear();
         for (size_t i = 0; i < newData.size(); ++i) {
             std::vector<std::wstring> row;

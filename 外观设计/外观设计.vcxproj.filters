@@ -78,6 +78,12 @@
     <ClInclude Include="MessageDialogBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FileHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidcsv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aaaaaa.cpp">
@@ -129,6 +135,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MessageDialogBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FileHandler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

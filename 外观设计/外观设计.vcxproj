@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClInclude Include="AnimatedGifPlayer.h" />
     <ClInclude Include="ButtonBase.h" />
+    <ClInclude Include="FileHandler.h" />
     <ClInclude Include="MediaPlayerBase.h" />
     <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="MessageDialogBase.h" />
     <ClInclude Include="PageBase.h" />
     <ClInclude Include="Page_and_table.h" />
+    <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="resource2.h" />
@@ -45,6 +47,7 @@
     <ClCompile Include="aaaaaa.cpp" />
     <ClCompile Include="AnimatedGifPlayer.cpp" />
     <ClCompile Include="ButtonBase.cpp" />
+    <ClCompile Include="FileHandler.cpp" />
     <ClCompile Include="MediaPlayerBase.cpp" />
     <ClCompile Include="MessageDialog.cpp" />
     <ClCompile Include="MessageDialogBase.cpp" />
@@ -152,7 +155,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,13 +170,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>E:\boost_1_88_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>E:\boost_1_88_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

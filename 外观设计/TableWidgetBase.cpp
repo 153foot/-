@@ -42,6 +42,7 @@ void TableWidgetBase::handleMouseClick(int mouseX, int mouseY)
 {
 }
 
-void TableWidgetBase::setData(const std::vector <std::vector<std::wstring>> &newData)
+void TableWidgetBase::setData(const std::vector <std::vector<std::wstring>> newData)
 {
 }
+
