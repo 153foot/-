@@ -383,14 +383,14 @@ inline void Widget::init_page6(int width, int height)
        L"联系方式", L"权限等级", L"权限列表", L"入职日期",
        L"最后登录时间"
     };
-    page6->maketable(std::make_shared<TableWidget>(100, 120, 920, 300, 8, 5), "管理员.csv",L'\t', ADMIN_HEADERS);
+    page6->maketable(std::make_shared<TableWidget>(100, 120, 920, 300, 8, 5), "管理员.csv", ADMIN_HEADERS);
 
     page6->addButton("1",std::make_unique<rect_button>(920, 0, 100, 20, L"返回！", [=]() {//
         setCurrentIndex(0);//测试用
 
     }));
     page6->addButton("1111", std::make_unique<rect_button>(920, 30, 100, 20, L"提交！", [=]() {//
-        page6->updata("评论表.csv");
+        page6->updata();
 
     }));
     //page6->addButton(std:: make_unique<rect_button>(0, 100, 90, 20, L"确认下单", [=]() {//
@@ -408,19 +408,50 @@ inline void Widget::init_page6(int width, int height)
 
     //}));
     page6->addButton("2", std::make_unique<rect_button>(120, 450, 90, 20, L"添加活动", [=]() {//
-        setCurrentIndex(0);//测试用
+        wchar_t s[50];
+        InputBox(s, 50, L"请输入要添加的内容从1开始", NULL, NULL, NULL, 0, false);
+        std::wstring newrow = s;
+        page6->addRow(newrow);
 
     }));
     page6->addButton("3", std::make_unique<rect_button>(820, 450, 90, 20, L"查看活动", [=]() {//
-        setCurrentIndex(0);//测试用
+        wchar_t s[10];
+        std::wstring row = L"";
+        if (InputBox(s, 10, L"请输入要查找的的行号从1开始", NULL, NULL, NULL, 0, false)) {
+
+            // 将用户输入转换为数字
+            int r = _wtoi(s);
+            if (r > 0 && r < page6->Cell_num()) {
+                row = page6->search_ID(r);
+                MessageBoxW(NULL, row.c_str(), _T("警告"), MB_OK | MB_ICONWARNING);
+            }
+            else {
+
+                MessageBoxW(NULL, _T("输入ID号错误"), _T("警告"), MB_OK | MB_ICONWARNING);
+            }
+
+
+        }
+
+       
 
     }));
     page6->addButton("4", std::make_unique<rect_button>(120, 478, 90, 20, L"修改活动", [=]() {//
-        setCurrentIndex(0);//测试用
+        int row = 0;
+        int columnstart = 0;
+        int columnend = 0;
+        wchar_t s[50];
+        InputBox(s, 50, L"请输入修改的内容从1开始", NULL, NULL, NULL, 0, false);
+        std::wstring Wide_string = s;
+
+        std::vector<std::wstring> sds=this->split_input_String_to_updateRow(Wide_string,L'|',row, columnstart, columnend);
+        
+        
+        page6->updateRow(row, columnstart, columnend, sds);
 
     }));
     page6->addButton("5", std::make_unique<rect_button>(820, 478, 90, 20, L"删除活动", [=]() {//
-        // 定义字符串缓冲区，并接收用户输入
+        // 定义字符串缓冲区，-.
         wchar_t s[10];
         if (InputBox(s, 10, L"请输入要删除的行号从1开始", NULL, NULL, NULL, 0, false)) {
 

@@ -17,7 +17,7 @@ public:
 	virtual void addtexstbox(std::string name, std::shared_ptr<TextboxBase>  texstbox);
 	virtual void addGIF(std::string name, std::shared_ptr<MediaPlayerBase> GIF);
 	virtual void addTable(std::unique_ptr<TableWidgetBase>& Table);
-	virtual void addaline();
+	
 	virtual void addTable(int index, std::unique_ptr<TableWidgetBase> Table);
 	virtual void draw();
 	

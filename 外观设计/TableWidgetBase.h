@@ -29,18 +29,31 @@ public:
 		return 0;
 		
 	}
-	// 删除选中行
-	virtual void deleteSelectedRow(int a) {
-
+	virtual void deleteALL() {
+	
 	}
-	// 修改选中行
-	virtual void updateSelectedRow( std::vector<std::wstring>& newRow) {
+	// 删除输入ID对应的行
+	virtual void deleteSelectedRow(int ID) {
 
 	}
 	// 添加新行
-	virtual   void addRow( std::vector<std::wstring>& newRow) {
+	virtual void addRow( std::vector<std::wstring>& newRow) {
 
 	}
+	virtual void Clear_container_data() {//清除容器数据
 	
+	}
+	virtual std::wstring find_ID_Row(int id) {//查找对应ID的一行数据
+		return L" ";
+	
+	}
+	virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow) {//修改一行数据
+	
+	
+	}
+	virtual void addRow(const std::wstring& newRow) {//添加一行新数据
+	
+	
+	}
 };
 

@@ -15,11 +15,11 @@ private:
     int height;
     std::unique_ptr<IMAGE> pageImage;
     std::shared_ptr<TableWidgetBase> table;
-   
+    std::string file_path;
     std::map<std::string, std::unique_ptr<ButtonBase>> buttons;
     std::map<std::string, std::shared_ptr<TextboxBase>> texstboxs;
     std::map<std::string, std::shared_ptr<MediaPlayerBase>> mediaPlayers;
-    
+    std::vector<std::wstring> headers;
 
 public:
     Page_and_table(int width, int height, const wchar_t* imagePath);
@@ -115,7 +115,7 @@ public:
             }
         
     }
-    std::vector<std::vector<std::wstring>> loaddata(const std::string& otherfilePath, wchar_t otherdelimiter) {
+    std::vector<std::vector<std::wstring>> loaddata(const std::string& otherfilePath) {
         FileHandler fileHandler(otherfilePath);//加载数据容器
 		std::vector<std::vector<std::wstring>> data1 = fileHandler.getData();
        
@@ -125,17 +125,31 @@ public:
     
     }
 
-    void maketable(std::shared_ptr<TableWidgetBase> tablePtr, const std::string& otherfilePath, wchar_t otherdelimiter, std::vector<std::wstring>& Headers) {//要改
-        std::vector<std::vector<std::wstring>> txtdata= loaddata(otherfilePath, otherdelimiter);
+    void maketable(std::shared_ptr<TableWidgetBase> tablePtr, const std::string& otherfilePath, std::vector<std::wstring>& Headers) {//要改
+        this->headers = Headers;
+        this->file_path = otherfilePath;
+        std::vector<std::vector<std::wstring>> txtdata= loaddata(otherfilePath);
         txtdata.insert(txtdata.begin(), Headers);
         tablePtr->setData(txtdata);
         addTable(tablePtr);
         
     }
-    void updata(const std::string& otherfilePath) {
-        FileHandler fileHandler(otherfilePath);//加载数据容器
+    void updata() {
+        //std::string& otherfilePath = this->file_path;
+        FileHandler fileHandler(this->file_path);//加载数据容器
         std::vector<std::vector<std::wstring>> txtdata =table->getData();
         fileHandler.setData(txtdata);
+    
+    }
+    void extraction_data() {//加载数据||更新数据库数据
+        FileHandler fileHandler(this->file_path);//加载数据容器
+        std::vector<std::vector<std::wstring>> extr_data = loaddata(this->file_path);
+        extr_data.insert(extr_data.begin(), this->headers);
+
+        table->Clear_container_data();
+
+        table->setData(extr_data);
+
     
     }
 
@@ -144,20 +158,29 @@ public:
 
         return table->Cell_num();
     }
-    // 删除选中行
+    // 删除输入的ID
      void deleteSelectedRow(int num) {
         
          table->deleteSelectedRow(num);
     }
 
     // 修改选中行
-     void updateSelectedRow(const std::vector<std::wstring>& newRow) {
-        // table->updateSelectedRow(,);
+     void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow) {
+         table->updateRow(row, colume_begin, colume_end, newRow);
     }
 
     // 添加新行
-       void addRow(const std::vector<std::wstring>& newRow) {
-        
+       void addRow(const std::wstring& newRow) {
+           table->addRow(newRow);
     }
-
+       
+       std::wstring search_ID(int ID) {
+           return table->find_ID_Row(ID);
+       
+       }
+       void chear_all_Cell() {
+           table->Clear_container_data();
+       
+       }
+      
 };

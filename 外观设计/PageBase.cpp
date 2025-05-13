@@ -21,9 +21,6 @@ void PageBase::addTable(std::unique_ptr<TableWidgetBase>& Table)
 }
 
 
-void PageBase::addaline()
-{
-}
 
 void PageBase::addTable(int index, std::unique_ptr<TableWidgetBase> Table)
 {

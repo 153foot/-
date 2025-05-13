@@ -4,6 +4,8 @@
 #include "functional"
 #include <algorithm>
 #include <easyx.h>
+#include <exception>
+#include <iostream>
 class TableWidget 
     : public TableWidgetBase {
 private:
@@ -243,44 +245,182 @@ public:
         solidrectangle(handleX, y + handleY, handleX + handleWidth, y + handleY + handleHeight);
     }
 
+    virtual std::wstring find_ID_Row(int id) {
+        for (const auto& row : data) {
+            if (!row.empty()) {
+                try {
+                    int currentId = std::stoi(row[0]);
+                    if (currentId == id) {
+                        std::wstring result;
+                        for (size_t i = 0; i < row.size(); ++i) {
+                            result += row[i];
+                            if (i != row.size() - 1) {
+                                result += L"|";
+                            }
+                        }
+                        return result;
+                    }
+                }
+                catch (const std::invalid_argument& invalid) {
+                    // 处理转换时参数无效的情况，比如字符串格式不正确
+                    std::cerr << invalid.what() << std::endl;
+                }
+                catch (const std::out_of_range& out_of_range) {
+                   std::cerr << out_of_range.what() <<std:: endl;
+                    // 处理转换时数值超出范围的情况
+                }
+            }
+        }
+        return L""; // 如果未找到，返回空字符串
+    }
     // 删除行
    virtual void deleteSelectedRow(int a) {
         if (a >0) {
-            data.erase(data.begin() + a);
-
-          
-            sortByID();
+            data.erase(data.begin() + a); 
+            sort_ASC_ID();
             calculateColumnWidths();
             draw();
             selectedRow = -1;
         }
+       
     }
+   virtual void deleteALL() {
+       data.erase(std::next(data.begin()),data.end());
 
-    // 修改选中行
-   virtual void updateSelectedRow(std::vector < std::wstring > & newRow) {
-        if (selectedRow != -1) {
-            data[selectedRow] = newRow;
-            sortByID();
-            calculateColumnWidths();
-        }
-    }
+   }
 
-    // 添加新行
-   virtual   void addRow( std::wstring& newRow) {
-        
-        sortByID();
-        calculateColumnWidths();
-    }
+    // 修改行n,修改 行n中的某列  
+   virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow) {
+       int update_colume_num= (colume_end- colume_begin)+1;
+       if (newRow.size() > data[0].size()) {
+           MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       
+       }
+       else if (newRow.size()< data[0].size()&& newRow.size()!= update_colume_num) {
+       
+           MessageBoxW(NULL, _T("输入内容为过少,修改的内容数量不符"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       }
 
-    // 按ID排序（假设第一列是ID列）
-    void sortByID() {
-        // 重新编号：从1开始递增
-        for (int i = 1; i < data.size(); ++i) {
-            if (data[i].size() > 0) { // 确保行至少有一个元素
-                data[i][0] = std::to_wstring(i); // 更新ID列
+
+       if (row >= 1 && row < static_cast<int>(data.size())) {
+           if (colume_begin == 0&& colume_end==0) {
+               // 修改整行
+               data[row] = newRow;
+           }
+           else if (colume_begin >= 1 && colume_end <= static_cast<int>(data[row].size())) {
+               // 修改指定列
+               auto colume =  static_cast<std::vector<std::wstring, std::allocator<std::wstring>>::size_type>(colume_begin - 1);
+                  
+               for (const auto& newRow_1 : newRow) {
+                   
+                   data[row][++colume] = newRow_1;
+                       
+               
+               }
+           }
+           else {
+               MessageBoxW(NULL, _T("输入ID错误"), _T("警告"), MB_OK | MB_ICONWARNING);
+               return;
+           
+           }
+
+           sort_ASC_ID();
+           calculateColumnWidths();
+       }
+   }
+   
+   // 添加新行
+  // 添加新行
+   virtual void addRow(const std::wstring& newRow) {
+
+       if (newRow.empty()) {
+           MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       }
+       std::vector<std::wstring> splitData = splitString(newRow);
+
+       // 检查是否有足够的元素
+       if (splitData.empty()) {
+           MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       }
+       if (splitData.size() > data[0].size()) {
+       
+           MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       }
+       else if (splitData.size() <data[0].size()) {
+           MessageBoxW(NULL, _T("输入内容为过少"), _T("警告"), MB_OK | MB_ICONWARNING);
+           return;
+       
+       }
+       // 将第一列(ID)转换为数字
+       
+           int newID = std::stoi(splitData[0]);
+
+           // 检查ID是否已存在
+           for (const auto& row : data) {
+               if (!row.empty() && std::stoi(row[0]) == newID) {
+                   MessageBoxW(NULL, _T("输入ID号重复"), _T("警告"), MB_OK | MB_ICONWARNING);
+               }
+           }
+       
+      
+
+       // 如果ID合法且唯一，则添加到数据中
+       data.push_back(splitData);
+       sort_ASC_ID();
+       calculateColumnWidths();
+   }
+   virtual void Clear_container_data() {
+       data.clear();
+   }
+   private:
+   std::vector<std::wstring> splitString(const std::wstring& input, wchar_t delimiter = L'|') {
+       std::vector<std::wstring> result;
+       size_t start = 0;
+       size_t end = 0;
+
+       while ((end = input.find(delimiter, start)) != std::wstring::npos) {
+           result.push_back(input.substr(start, end - start));
+           start = end + 1;
+       }
+
+       // 添加最后一个子字符串（或整个字符串，如果没有找到分隔符）
+       result.push_back(input.substr(start));
+
+       return result;
+   }
+
+    //// 按ID排序
+    //void sortByID() {
+    //    // 重新编号：从1开始递增
+    //    for (int i = 1; i < data.size(); ++i) {
+    //        if (data[i].size() > 0) { // 确保行至少有一个元素
+    //            data[i][0] = std::to_wstring(i); // 更新ID列
+    //        }
+    //    }
+    //}
+    void sort_ASC_ID() {
+        // 按现有ID列的值升序排序（不重新编号）
+        std::sort(std::next(data.begin()), data.end(), [](const std::vector<std::wstring>& a, const std::vector<std::wstring>& b) {
+            if (a.empty() || b.empty() || a[0].empty() || b[0].empty()) {
+                return false; // 空行或空ID不参与排序
             }
-        }
+            try {
+                // 尝试将ID转换为整数进行比较
+                int idA = std::stoi(a[0]);
+                int idB = std::stoi(b[0]);
+                return idA < idB;
+            }
+            catch (const std::exception&) {
+                // 转换失败时按字符串比较
+                return a[0] < b[0];
+            }
+        });
+        calculateColumnWidths(); 
     }
-
   
 };

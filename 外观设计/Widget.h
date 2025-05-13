@@ -126,6 +126,53 @@ public:
         }
         return false;
     }
+    std::vector<std::wstring> split_input_String_to_updateRow(const std::wstring& input, wchar_t delimiter = L'|', 
+        int& row = *(new int(0)), int& colume_begin = *(new int(0)), int& colume_end = *(new int(0))) {
+       //------------------------------------------------------------------------------------------------
+       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+        std::vector<std::wstring> result;
+        size_t start = 0;
+        size_t end = 0;
+
+        while ((end = input.find(delimiter, start)) != std::wstring::npos) {
+            result.push_back(input.substr(start, end - start));
+            start = end + 1;
+        }
+
+        // 添加最后一个子字符串（或整个字符串，如果没有找到分隔符）
+        result.push_back(input.substr(start));
+
+        // 将前两个子字符串转换为整数并赋值给a和b
+        if (result.size() > 0) {
+            try {
+                row = std::stoi(result[0]);
+            }
+            catch (...) {
+                row = 0; // 转换失败时设为默认值
+            }
+        }
+
+        if (result.size() > 1) {
+            try {
+                colume_begin = std::stoi(result[1]);
+            }
+            catch (...) {
+                colume_begin = 0; // 转换失败时设为默认值
+            }
+        }
+
+        if (result.size() > 1) {
+            try {
+                colume_end = std::stoi(result[2]);
+            }
+            catch (...) {
+                colume_end = 0; // 转换失败时设为默认值
+            }
+        }
+        result.erase(result.begin(), result.begin()+3);//删除前三个分界符内容
+
+        return result;
+    }
    
     void init();
     void run();
