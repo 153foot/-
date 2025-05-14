@@ -68,12 +68,5 @@ public:
     virtual void KeyInput(wchar_t ch);
     virtual void Hotkeydown(BYTE as);
     void onMouseClick(int mouseX, int mouseY);
-	/*void showMessageDialog() {
-		if (MessageDialo) {
-			MessageDialo->draw();
-
-            Sleep(2000);
-		}
-	}*/
-
+	
 };

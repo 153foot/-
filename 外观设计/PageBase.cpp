@@ -1,5 +1,5 @@
 #include "PageBase.h"
-
+std::unique_ptr<MessageDialogBase> PageBase::emptyDialog = nullptr;
 PageBase::~PageBase()
 {
 }
@@ -63,6 +63,13 @@ void PageBase::Hotkeydown(BYTE as)
 
  void PageBase::addMessageDialog(std::unique_ptr<MessageDialogBase> messageDialog)
  {
+ }
+
+ std::unique_ptr<MessageDialogBase>& PageBase::get_this_MessageDialo()
+ {
+
+	 return emptyDialog;
+	 // TODO: 在此处插入 return 语句
  }
 
 

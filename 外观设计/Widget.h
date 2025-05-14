@@ -11,7 +11,8 @@
 #include "TableWidget.h"
 #include "AnimatedGifPlayer.h"
 #include "MessageDialog.h"
-
+#include "Backgroundmusic.h"
+#include "MusicButton.h"
 #include <filesystem>
 #include <vector>
 #include <memory>
@@ -22,13 +23,19 @@ private:
 
     int width;
     int height;
-    int currentIndex;
-    std::vector<std::shared_ptr<PageBase>> pages;
-    void setCurrentIndex(int index);
-    std::map<std::wstring, std::wstring> userDatabase; // 存储用户名和密码
-    std::map<std::wstring, std::wstring> adminDatabase; // 存储管理员用户名和密码
+    string currentIndex;
+    std::map<std::string, std::shared_ptr<PageBase>> pages;
+    BackgroundMusic bgMusic;
+  
+    std::map< std::wstring, std::wstring> userDatabase; // 存储用户名和密码
+    std::map< std::wstring,  std::wstring> adminDatabase; // 存储管理员用户名和密码
+    std::map<int, const std::wstring> keys;//存储密钥
     std::wstring pas;
     std::wstring name;
+    std::wstring input_information;//输入信息
+    std::wstring mobile_phone_number;//手机号
+    std::wstring confirm_password_again;//再次确认密码
+    std::wstring inputkey;//密钥
 	//FileHandler fileHandler;
    
  // 定义按钮 ID 枚举
@@ -95,16 +102,10 @@ private:
 
     }
 
-
+    void setCurrentIndex(string index_name);
 public:
     Widget(int width, int height);
     ~Widget();
-    void reservevector() {
-    
-        pages.reserve(300);
-    
-    
-    }
   
 
     // 登录验证
@@ -126,6 +127,15 @@ public:
         }
         return false;
     }
+    bool checkKey(const std::wstring& inputKey) const {//密钥检测
+        for (auto it = keys.begin(); it != keys.end(); ++it) {
+            if (it->second == inputKey) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     std::vector<std::wstring> split_input_String_to_updateRow(const std::wstring& input, wchar_t delimiter = L'|', 
         int& row = *(new int(0)), int& colume_begin = *(new int(0)), int& colume_end = *(new int(0))) {
        //------------------------------------------------------------------------------------------------
@@ -140,7 +150,17 @@ public:
         }
 
         // 添加最后一个子字符串（或整个字符串，如果没有找到分隔符）
-        result.push_back(input.substr(start));
+        if (start != std::wstring::npos) {
+
+            result.push_back(input.substr(start));
+        }
+
+        if (result.size() <= 3) {
+        
+        
+            return {};
+        
+        }
 
         // 将前两个子字符串转换为整数并赋值给a和b
         if (result.size() > 0) {
@@ -178,306 +198,306 @@ public:
     void run();
     void close();
 
-	void selectbutton(ButtonID id) {//选择按钮
-        ButtonID button_id = id;
-		
-            switch (button_id)
-            {
-
-			case ButtonID::MAIN_LOGIN://主界面
-			{
-                setCurrentIndex(1);// 点击按钮2时，执行相关的逻辑
-				
-			}
-          
-
-			break;
-			case ButtonID::MAIN_REGISTER://注册按钮
-            {
-                setCurrentIndex(2); // 点击按钮3时，执行相关的逻辑
-            
-            
-            
-            }
-				break;
-                //以下登录ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-			case ButtonID::LOGIN_RETURN_MAIN://返回主界面按钮
-			{
-                setCurrentIndex(0);
-				
-			}
-		
-			break;
-			case ButtonID::LOGIN_USER_ACCOUNT://用户账号按钮
-			{
-				wchar_t password[100];
-				InputBox(password, 100);
-			}
-			
-            break;
-
-			case ButtonID::LOGIN_PASSWORD://密码按钮
-			{
-				wchar_t password[100];
-				InputBox(password, 100);
-			}
-			break;
-            case ButtonID::LOGIN_ENTER://进入按钮
-            {
-            }
-            break;
-            case ButtonID::LOGIN_USER://用户按钮
-            {
-                setCurrentIndex(4);
-            }
-            break;
-
-			case ButtonID::LOGIN_ADMIN://管理员按钮
-			{
-				setCurrentIndex(3);
-			}
-			break;
-      
-            case ButtonID::LOGIN_FORGET_PASSWORD:
-
-            {
-                wchar_t password[100];
-                InputBox(password, 100);
-            
-            
-            
-            }
-
-            break;
-            case ButtonID::LOGIN_GO_REGISTER:
-
-            {
-                setCurrentIndex(2);
-
-
-            }
-
-            break;
-            //一下注册ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-
-            case ButtonID::REGISTER_CONFIRM:
-
-            {
-                setCurrentIndex(1);
-            }
-
-            break;
-            case ButtonID::REGISTER_CONFIRM_PASSWORD:
-
-            {
-                wchar_t password[100];
-                InputBox(password, 100);
-            }
-
-            break;
-            case ButtonID::REGISTER_LOGIN_PASSWORD:
-
-            {
-                wchar_t password[100];
-                InputBox(password, 100);
-            }
+	//void selectbutton(ButtonID id) {//选择按钮
+ //       ButtonID button_id = id;
+	//	
+ //           switch (button_id)
+ //           {
+
+	//		case ButtonID::MAIN_LOGIN://主界面
+	//		{
+ //               setCurrentIndex(1);// 点击按钮2时，执行相关的逻辑
+	//			
+	//		}
+ //         
+
+	//		break;
+	//		case ButtonID::MAIN_REGISTER://注册按钮
+ //           {
+ //               setCurrentIndex(2); // 点击按钮3时，执行相关的逻辑
+ //           
+ //           
+ //           
+ //           }
+	//			break;
+ //               //以下登录ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+	//		case ButtonID::LOGIN_RETURN_MAIN://返回主界面按钮
+	//		{
+ //               setCurrentIndex(0);
+	//			
+	//		}
+	//	
+	//		break;
+	//		case ButtonID::LOGIN_USER_ACCOUNT://用户账号按钮
+	//		{
+	//			wchar_t password[100];
+	//			InputBox(password, 100);
+	//		}
+	//		
+ //           break;
+
+	//		case ButtonID::LOGIN_PASSWORD://密码按钮
+	//		{
+	//			wchar_t password[100];
+	//			InputBox(password, 100);
+	//		}
+	//		break;
+ //           case ButtonID::LOGIN_ENTER://进入按钮
+ //           {
+ //           }
+ //           break;
+ //           case ButtonID::LOGIN_USER://用户按钮
+ //           {
+ //               setCurrentIndex(4);
+ //           }
+ //           break;
+
+	//		case ButtonID::LOGIN_ADMIN://管理员按钮
+	//		{
+	//			setCurrentIndex(3);
+	//		}
+	//		break;
+ //     
+ //           case ButtonID::LOGIN_FORGET_PASSWORD:
+
+ //           {
+ //               wchar_t password[100];
+ //               InputBox(password, 100);
+ //           
+ //           
+ //           
+ //           }
+
+ //           break;
+ //           case ButtonID::LOGIN_GO_REGISTER:
+
+ //           {
+ //               setCurrentIndex(2);
+
+
+ //           }
+
+ //           break;
+ //           //一下注册ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+ //           case ButtonID::REGISTER_CONFIRM:
+
+ //           {
+ //               setCurrentIndex(1);
+ //           }
+
+ //           break;
+ //           case ButtonID::REGISTER_CONFIRM_PASSWORD:
+
+ //           {
+ //               wchar_t password[100];
+ //               InputBox(password, 100);
+ //           }
+
+ //           break;
+ //           case ButtonID::REGISTER_LOGIN_PASSWORD:
+
+ //           {
+ //               wchar_t password[100];
+ //               InputBox(password, 100);
+ //           }
 
-            break;
-            case ButtonID::REGISTER_PHONE_NUMBER:
-                
-            {
-                wchar_t password[100];
-                InputBox(password, 100);
-            }
+ //           break;
+ //           case ButtonID::REGISTER_PHONE_NUMBER:
+ //               
+ //           {
+ //               wchar_t password[100];
+ //               InputBox(password, 100);
+ //           }
 
-            break;
-            case ButtonID::REGISTER_RETURN_MAIN:
+ //           break;
+ //           case ButtonID::REGISTER_RETURN_MAIN:
 
-            {
-                setCurrentIndex(0);
-            }
+ //           {
+ //               setCurrentIndex(0);
+ //           }
 
-            break;
-            case ButtonID::REGISTER_USER_ACCOUNT://账号
+ //           break;
+ //           case ButtonID::REGISTER_USER_ACCOUNT://账号
 
-            {
-                wchar_t password[100];//用swiTch语句来判断
-                InputBox(password, 100);
-            }
+ //           {
+ //               wchar_t password[100];//用swiTch语句来判断
+ //               InputBox(password, 100);
+ //           }
 
-            break;
-            //管理员界面按钮
-            case ButtonID::ADMIN_ANNOUNCEMENT_MANAGEMENT://
+ //           break;
+ //           //管理员界面按钮
+ //           case ButtonID::ADMIN_ANNOUNCEMENT_MANAGEMENT://
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::ADMIN_EXIT :
+ //           break;
+ //           case ButtonID::ADMIN_EXIT :
 
-            {
-                exit(0); // 退出程序
-              
-            }
+ //           {
+ //               exit(0); // 退出程序
+ //             
+ //           }
 
-            break;
-            case ButtonID::ADMIN_INVENTORY_MANAGEMENT:
+ //           break;
+ //           case ButtonID::ADMIN_INVENTORY_MANAGEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::ADMIN_MENU_MANAGEMENT:
+ //           break;
+ //           case ButtonID::ADMIN_MENU_MANAGEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::ADMIN_ORDER_MANAGEMENT:
+ //           break;
+ //           case ButtonID::ADMIN_ORDER_MANAGEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::ADMIN_RETURN_MAIN:
+ //           break;
+ //           case ButtonID::ADMIN_RETURN_MAIN:
 
-            {
-                setCurrentIndex(0);
-                
-            }
+ //           {
+ //               setCurrentIndex(0);
+ //               
+ //           }
 
-            break;
-            case ButtonID::ADMIN_TABLE_MANAGEMENT:
+ //           break;
+ //           case ButtonID::ADMIN_TABLE_MANAGEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::ADMIN_USER_MANAGEMENT:
+ //           break;
+ //           case ButtonID::ADMIN_USER_MANAGEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            //用户主界面
-            case ButtonID::USER_PAGE4_ACTIVITY:
+ //           break;
+ //           //用户主界面
+ //           case ButtonID::USER_PAGE4_ACTIVITY:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;   
-            case ButtonID::USER_PAGE4_CHECK_ANNOUNCEMENT:
+ //           break;   
+ //           case ButtonID::USER_PAGE4_CHECK_ANNOUNCEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE4_EXIT:
+ //           break;
+ //           case ButtonID::USER_PAGE4_EXIT:
 
-            {
-                exit(0); // 退出程序
-                
-            }
+ //           {
+ //               exit(0); // 退出程序
+ //               
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE4_GO_EVALUATE:
+ //           break;
+ //           case ButtonID::USER_PAGE4_GO_EVALUATE:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE4_MENU:
+ //           break;
+ //           case ButtonID::USER_PAGE4_MENU:
 
-            {
-                setCurrentIndex(5);
-            }
+ //           {
+ //               setCurrentIndex(5);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE4_RETURN_MAIN:
+ //           break;
+ //           case ButtonID::USER_PAGE4_RETURN_MAIN:
 
-            {
-                setCurrentIndex(0);
-                
-            }
+ //           {
+ //               setCurrentIndex(0);
+ //               
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE4_SHOPPING_CART:
+ //           break;
+ //           case ButtonID::USER_PAGE4_SHOPPING_CART:
 
-            {
-               
-            }
+ //           {
+ //              
+ //           }
 
-            break;
-            //AAAAA用户菜单
-            case ButtonID::USER_PAGE5_ACTIVITY:
+ //           break;
+ //           //AAAAA用户菜单
+ //           case ButtonID::USER_PAGE5_ACTIVITY:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_GO_EVALUATE:
+ //           break;
+ //           case ButtonID::USER_PAGE5_GO_EVALUATE:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_MENU_TITLE:
+ //           break;
+ //           case ButtonID::USER_PAGE5_MENU_TITLE:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_RETURN_MAIN_MENU:
+ //           break;
+ //           case ButtonID::USER_PAGE5_RETURN_MAIN_MENU:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_RETURN_USER_MAIN:
+ //           break;
+ //           case ButtonID::USER_PAGE5_RETURN_USER_MAIN:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_VIEW_ANNOUNCEMENT:
+ //           break;
+ //           case ButtonID::USER_PAGE5_VIEW_ANNOUNCEMENT:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            case ButtonID::USER_PAGE5_VIEW_SHOPPING_CART:
+ //           break;
+ //           case ButtonID::USER_PAGE5_VIEW_SHOPPING_CART:
 
-            {
-                setCurrentIndex(2);
-            }
+ //           {
+ //               setCurrentIndex(2);
+ //           }
 
-            break;
-            
+ //           break;
+ //           
 
-            break;
-            default:
-                break;
-            }
+ //           break;
+ //           default:
+ //               break;
+ //           }
 
 
-        
-	
-    }   
+ //       
+	//
+ //   }   
 
     void init_page0(int width, int height);
     void init_page1(int width, int height);
@@ -486,5 +506,21 @@ public:
     void init_page4(int width, int height);
     void init_page5(int width, int height);
     void init_page6(int width, int height);
-   
+    void init_page7(int width, int height);
+    void init_page8(int width, int height);
+    void init_page9(int width, int height);
+    void init_page10(int width, int height);
+    void init_page11(int width, int height);
+    void init_page12(int width, int height);
+    void init_page13(int width, int height);
+    void init_page14(int width, int height);
+    void init_page15(int width, int height);
+    void init_page16(int width, int height);
+    void init_page17(int width, int height);
+    void init_page18(int width, int height);
+    void init_page19(int width, int height);
+    void init_page20(int width, int height);
+    void init_page21(int width, int height);
+    void init_page22(int width, int height);
+
 };

@@ -2,6 +2,8 @@
 #include <windows.h>
 #include<vector>
 #include<string>
+#include <memory>
+#include "MessageDialogBase.h"
 class TableWidgetBase
 {
 protected:
@@ -43,15 +45,15 @@ public:
 	virtual void Clear_container_data() {//清除容器数据
 	
 	}
-	virtual std::wstring find_ID_Row(int id) {//查找对应ID的一行数据
+	virtual std::wstring find_ID_Row(int id ,std::unique_ptr<MessageDialogBase>& MessageDialo) {//查找对应ID的一行数据
 		return L" ";
 	
 	}
-	virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow) {//修改一行数据
+	virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow, std::unique_ptr<MessageDialogBase>& MessageDialo) {//修改一行数据
 	
 	
 	}
-	virtual void addRow(const std::wstring& newRow) {//添加一行新数据
+	virtual void addRow(const std::wstring& newRow, std::unique_ptr<MessageDialogBase>& MessageDialo) {//添加一行新数据
 	
 	
 	}

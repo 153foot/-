@@ -84,6 +84,12 @@
     <ClInclude Include="rapidcsv.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BackgroundMusic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aaaaaa.cpp">
@@ -140,6 +146,12 @@
     <ClCompile Include="FileHandler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="BackgroundMusic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="外观设计1.rc">
@@ -150,5 +162,11 @@
     <Image Include="ico\dog.ico">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\A生成菜品\mymenu_demo.sln" />
+    <None Include="..\..\A生成菜品\Project1\Project1.vcxproj" />
+    <None Include="..\..\A生成菜品\x64\Release\mymenu_demo.pdb" />
+    <None Include="..\..\A生成菜品\mymenu_demo\mymenu_demo.vcxproj" />
   </ItemGroup>
 </Project>

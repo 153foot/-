@@ -153,7 +153,8 @@ public:
     virtual void draw() {
         // 绘制表格区域
         setlinestyle(PS_SOLID, 2);
-        setfillcolor(noclick_bkselect_color);
+        setfillcolor(RGB(240, 155, 89));
+       // setfillcolor(noclick_bkselect_color);
         solidrectangle(x, y, x + width, y + height);
         setlinecolor(noclick_textselect_color);
         settextstyle(12, 0, fontName);
@@ -174,6 +175,8 @@ public:
         SelectClipRgn(GetImageHDC(), headerClipRegion);
         for (int j = 0; j < totalColumns; ++j) {
             int columnWidth = columnWidths[j];
+            
+            settextcolor(BLACK);
             rectangle(columnX, headerY, columnX + columnWidth, headerY + rowHeight);
             // 水平居中
             int textX = columnX + (columnWidth - textwidth(data[0][j].c_str())) / 2;
@@ -245,10 +248,10 @@ public:
         solidrectangle(handleX, y + handleY, handleX + handleWidth, y + handleY + handleHeight);
     }
 
-    virtual std::wstring find_ID_Row(int id) {
-        for (const auto& row : data) {
+    virtual std::wstring find_ID_Row(int id, std::unique_ptr<MessageDialogBase>& MessageDialo) {
+        for (const auto& row : std::vector<std::vector<std::wstring>>(data.begin() + 1, data.end())) {
             if (!row.empty()) {
-                try {
+               
                     int currentId = std::stoi(row[0]);
                     if (currentId == id) {
                         std::wstring result;
@@ -260,15 +263,8 @@ public:
                         }
                         return result;
                     }
-                }
-                catch (const std::invalid_argument& invalid) {
-                    // 处理转换时参数无效的情况，比如字符串格式不正确
-                    std::cerr << invalid.what() << std::endl;
-                }
-                catch (const std::out_of_range& out_of_range) {
-                   std::cerr << out_of_range.what() <<std:: endl;
-                    // 处理转换时数值超出范围的情况
-                }
+                
+             
             }
         }
         return L""; // 如果未找到，返回空字符串
@@ -290,16 +286,17 @@ public:
    }
 
     // 修改行n,修改 行n中的某列  
-   virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow) {
+   virtual void updateRow(int row, int colume_begin, int colume_end, const std::vector<std::wstring>& newRow, std::unique_ptr<MessageDialogBase>& MessageDialo) {
        int update_colume_num= (colume_end- colume_begin)+1;
        if (newRow.size() > data[0].size()) {
-           MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
+           MessageDialo->setMessage(_T("输入内容为过多"));
+           //MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        
        }
-       else if (newRow.size()< data[0].size()&& newRow.size()!= update_colume_num) {
-       
-           MessageBoxW(NULL, _T("输入内容为过少,修改的内容数量不符"), _T("警告"), MB_OK | MB_ICONWARNING);
+       else if (newRow.size()< data[0].size()|| newRow.size()!= update_colume_num) {
+           MessageDialo->setMessage(_T("输入内容为过少,修改的内容数量不符"));
+          // MessageBoxW(NULL, _T("输入内容为过少,修改的内容数量不符"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        }
 
@@ -321,7 +318,8 @@ public:
                }
            }
            else {
-               MessageBoxW(NULL, _T("输入ID错误"), _T("警告"), MB_OK | MB_ICONWARNING);
+               MessageDialo->setMessage(_T("输入ID错误"));
+               //MessageBoxW(NULL, _T("输入ID错误"), _T("警告"), MB_OK | MB_ICONWARNING);
                return;
            
            }
@@ -333,26 +331,29 @@ public:
    
    // 添加新行
   // 添加新行
-   virtual void addRow(const std::wstring& newRow) {
+   virtual void addRow(const std::wstring& newRow, std::unique_ptr<MessageDialogBase>& MessageDialo) {
 
        if (newRow.empty()) {
-           MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
+           MessageDialo->setMessage(_T("内容为空"));
+          // MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        }
        std::vector<std::wstring> splitData = splitString(newRow);
 
        // 检查是否有足够的元素
        if (splitData.empty()) {
-           MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
+           MessageDialo->setMessage(_T("内容为空"));
+          // MessageBoxW(NULL, _T("内容为空"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        }
        if (splitData.size() > data[0].size()) {
-       
-           MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
+           MessageDialo->setMessage(_T("输入内容为过多"));
+          // MessageBoxW(NULL, _T("输入内容为过多"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        }
        else if (splitData.size() <data[0].size()) {
-           MessageBoxW(NULL, _T("输入内容为过少"), _T("警告"), MB_OK | MB_ICONWARNING);
+           MessageDialo->setMessage(_T("输入内容为过少"));
+          // MessageBoxW(NULL, _T("输入内容为过少"), _T("警告"), MB_OK | MB_ICONWARNING);
            return;
        
        }
@@ -361,9 +362,12 @@ public:
            int newID = std::stoi(splitData[0]);
 
            // 检查ID是否已存在
-           for (const auto& row : data) {
+        
+           for (const auto& row : std::vector<std::vector<std::wstring>>(data.begin() + 1, data.end())) {
                if (!row.empty() && std::stoi(row[0]) == newID) {
-                   MessageBoxW(NULL, _T("输入ID号重复"), _T("警告"), MB_OK | MB_ICONWARNING);
+                   MessageDialo->setMessage(_T("输入ID号重复"));
+                   return;
+                   //MessageBoxW(NULL, _T("输入ID号重复"), _T("警告"), MB_OK | MB_ICONWARNING);
                }
            }
        

@@ -9,7 +9,8 @@
 
 class PageBase
 {
-
+	
+	static std::unique_ptr<MessageDialogBase> emptyDialog;
 
 public:
 	virtual ~PageBase();
@@ -29,5 +30,6 @@ public:
 	virtual void Hotkeydown(BYTE as);
 	virtual std::wstring get_texstbox_message(std::string index);
 	virtual void addMessageDialog(std::unique_ptr<MessageDialogBase> messageDialog);//添加消息对话框
+	virtual std::unique_ptr<MessageDialogBase>& get_this_MessageDialo();
 };
 

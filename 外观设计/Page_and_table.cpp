@@ -1,6 +1,6 @@
 #include "Page_and_table.h"
 Page_and_table::Page_and_table(int width, int height, const wchar_t* imagePath) 
-    : width(width), height(height), table(nullptr), pageImage(new IMAGE(width, height)), file_path(" ") {
+    : width(width), height(height), table(nullptr), pageImage(new IMAGE(width, height)), file_path(" "), MessageDialo(nullptr) {
    
     loadimage(pageImage.get(), imagePath, width, height);
     setfillcolor(RGB(240, 240, 240));

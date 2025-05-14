@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedGifPlayer.h" />
+    <ClInclude Include="BackgroundMusic.h" />
     <ClInclude Include="ButtonBase.h" />
     <ClInclude Include="FileHandler.h" />
     <ClInclude Include="MediaPlayerBase.h" />
     <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="MessageDialogBase.h" />
+    <ClInclude Include="MusicButton.h" />
     <ClInclude Include="PageBase.h" />
     <ClInclude Include="Page_and_table.h" />
     <ClInclude Include="rapidcsv.h" />
@@ -46,11 +48,13 @@
   <ItemGroup>
     <ClCompile Include="aaaaaa.cpp" />
     <ClCompile Include="AnimatedGifPlayer.cpp" />
+    <ClCompile Include="BackgroundMusic.cpp" />
     <ClCompile Include="ButtonBase.cpp" />
     <ClCompile Include="FileHandler.cpp" />
     <ClCompile Include="MediaPlayerBase.cpp" />
     <ClCompile Include="MessageDialog.cpp" />
     <ClCompile Include="MessageDialogBase.cpp" />
+    <ClCompile Include="MusicButton.cpp" />
     <ClCompile Include="PageBase.cpp" />
     <ClCompile Include="Page_and_table.cpp" />
     <ClCompile Include="TableWidget.cpp" />
@@ -68,6 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="ico\dog.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\A生成菜品\mymenu_demo.sln" />
+    <None Include="..\..\A生成菜品\mymenu_demo\mymenu_demo.vcxproj" />
+    <None Include="..\..\A生成菜品\Project1\Project1.vcxproj" />
+    <None Include="..\..\A生成菜品\x64\Release\mymenu_demo.pdb" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
